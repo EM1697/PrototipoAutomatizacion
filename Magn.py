@@ -1,14 +1,15 @@
-import RPi.GPIO as gpio
+import RPi.GPIO as gpio, time
+from gpiozero import LED, Button
 gpio.setmode(gpio.BCM)
 gpio.setwarnings(False)
 
-hallpin = 2
-ledpin = 3
+hallpin = Button(17)
+ledpin = LED(27)
 
 while True:
-    if(gpio.input(hallpin) == False):
-        gpio.output(ledpin, True)
+    if hallpin.is_pressed:
+        ledpin.on()
         print("magnet detected")
     else:
-        gpio.output(ledpin, False)
+        ledpin.off()
         print("magnetic field not detected")

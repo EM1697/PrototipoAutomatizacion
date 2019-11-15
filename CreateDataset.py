@@ -5,7 +5,7 @@ detector = cv2.CascadeClassifier('cascades/haarcascade_frontalface_default.xml')
 Id = raw_input('Enter your Id: \n\r')
 sampleNum = 0
 while (True):
-    if isinstance(Id, int):
+    if Id.isdigit():
         ret, img = cam.read()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = detector.detectMultiScale(gray, 1.3, 5)

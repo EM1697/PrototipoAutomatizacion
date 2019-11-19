@@ -1,8 +1,33 @@
-import cv2
+import cv2, sqlite3
 cam = cv2.VideoCapture(0)
 detector = cv2.CascadeClassifier('cascades/haarcascade_frontalface_default.xml')
 
+def insertOrUpdateToDb(id, name):
+    conn = sqlite3.connect('FaceBase.db')
+
+    #Check if exists
+    cmd = "SELECT * from People WHERE id_person = " + str(id)
+
+    #Execute command and save all raws of request
+    cursor = conn.execute(cmd)
+
+    exists = False
+    for row in cursor:
+        exists = True
+
+    if exists:
+        cmd = "UPDATE People SET name = \'" + str(name) + "\' where id_person = " + str(id)
+    else:
+        cmd = 'INSERT INTO People (id_person, name) VALUES (' + str(id) + ', \'' + str(name) + '\')'
+
+    conn.execute(cmd)
+    conn.commit()
+    conn.close()
+
+
 Id = raw_input('Enter your Id: \n\r')
+name = raw_input('Enter your name: \n\r')
+insertOrUpdateToDb(Id, name)
 sampleNum = 0
 while (True):
     if Id.isdigit():
